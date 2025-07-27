@@ -5,5 +5,10 @@ namespace GroceryBackend.src.Domain.Interfaces
     public interface IUserProductsService
     {
         Task<List<UserProductDto>> GetAllByUserSync(int IdUser);
+        Task AddUserProductAsync(UserProductDto userProductDto);
+
+        Task DeleteByKeyAsync(int IdKey);
+
+        Task AddSave(int IdKey);
     }
 }

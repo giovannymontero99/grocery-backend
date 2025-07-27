@@ -11,5 +11,9 @@
         public int IdUser { get; set; }
 
         public int IdProduct { get; set; }
+
+        public bool IsSaved { get; set; } = false;
+
+        public ProductsDto? Products { get; set; }
     }
 }

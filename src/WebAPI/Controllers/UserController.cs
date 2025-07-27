@@ -28,13 +28,28 @@ namespace GroceryBackend.src.WebAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
             try
             {
+
                 // Take the id user from token
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return Ok();
+
+                // Validate not null
+                if (userId == null) return Unauthorized();
+
+                // Get the user from DB by id from the token
+                var userResponse = await _userService.GetUserByIdAsync(int.Parse(userId));
+
+                // Create the object for response
+                UserDto userDto = new UserDto() {
+                    Email = userResponse.Email,
+                    FullName = userResponse.FullName,
+                    Name = userResponse.Name,
+                };
+
+                return Ok(userDto);
             }
             catch (Exception ex)
             {
@@ -60,6 +75,36 @@ namespace GroceryBackend.src.WebAPI.Controllers
         }
 
         [Authorize]
+        [HttpPost("add_favorite_product")]
+        public async Task<IActionResult> AddFavoriteProduct([FromBody] int idProduct) 
+        {
+            try
+            {
+
+                // Take the id user from token
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                // Validate not null
+                if (userId == null) return Unauthorized();
+
+                // Create the new User Product Dto
+                var userProductDto = new UserProductDto() { 
+                    IdUser = int.Parse(userId),
+                    IdProduct = idProduct
+                };
+
+                await _userProductsService.AddUserProductAsync(userProductDto);
+
+
+                return Ok();
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpGet("favorite_products")]
         public async Task<IActionResult> GetFavoriteProducts() 
         {
@@ -79,5 +124,37 @@ namespace GroceryBackend.src.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpPost("delete_favorite_product")]
+        public async Task<IActionResult> DeleteById([FromBody] int idKey) 
+        {
+            try 
+            {
+                await _userProductsService.DeleteByKeyAsync(idKey);
+                return Ok();
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("save_favorite_product")]
+        public async Task<IActionResult> SaveFavoriteUserProduct([FromBody] int idKey) 
+        {
+            try
+            {
+                await _userProductsService.AddSave(idKey);
+                return Ok();
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }

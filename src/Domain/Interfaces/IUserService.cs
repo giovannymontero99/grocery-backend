@@ -7,7 +7,6 @@ namespace GroceryBackend.src.Domain.Interfaces
         Task<UserDto> GetUserByIdAsync(int id);
         Task<List<UserDto>> GetAllUsersAsync();
         Task CreateUserAsync(UserDto userDto);
-
         Task<UserDto?> GetUserByName(string username);
     }
 }

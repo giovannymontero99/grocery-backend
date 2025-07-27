@@ -36,7 +36,15 @@ namespace GroceryBackend.src.WebAPI.Controllers
                 };
 
                 await _userService.CreateUserAsync(userDto);
-                return Ok();
+
+                // Get the user by name
+                user = await _userService.GetUserByName(request.Name);
+                if (user == null) return NotFound(new { Message = "User does not exist" });
+                if (!BCrypt.Net.BCrypt.Verify(request.Password, user.Password)) return Unauthorized();
+
+                // Create a new token by Id and Email
+                var token = _authService.GenerateJwtToken(user.Id.ToString(), user.Email, "User");
+                return Ok(new { Token = token });
             }
             catch (Exception e) {
                 return BadRequest(e.Message);
@@ -72,8 +80,8 @@ namespace GroceryBackend.src.WebAPI.Controllers
 
 public class LoginRequest
 {
-    public string FullName { get; set; }
-    public string Email { get; set; }
+    public string? FullName { get; set; }
+    public string? Email { get; set; }
     public string Name { get; set; }
     public string Password { get; set; }
 }

@@ -30,6 +30,20 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// CORS Configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDevClient",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:4200") // URL de tu frontend Angular
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // Si usas cookies o auth headers
+        });
+});
+
 // Register AuthService
 builder.Services.AddScoped<IAuthService, AuthService>();
 
@@ -72,6 +86,8 @@ app.MapControllers();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors("AllowAngularDevClient");
 
 app.UseAuthorization();
 

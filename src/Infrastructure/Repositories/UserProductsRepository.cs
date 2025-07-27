@@ -15,10 +15,35 @@ namespace GroceryBackend.src.Infrastructure.Repositories
 
         public async Task<List<UserProduct>> GetAllByUserSync(int IdUser)
         {
-            return await _appDbContext.UserProduct.Where(up => up.User.UserId == IdUser).ToListAsync();
+            return await _appDbContext.UserProduct
+                .Where(up => up.User.UserId == IdUser)
+                .Include(up => up.Products)
+                .ToListAsync();
         }
 
+        public async Task AddUserProductAsync(UserProduct userProduct) 
+        {
+            await _appDbContext.UserProduct.AddAsync(userProduct);
+            await _appDbContext.SaveChangesAsync();
+        }
 
+        public async Task DeleteByKeyAsync(int IdKey)
+        {
+            var userProduct = await _appDbContext.UserProduct.FindAsync(IdKey);
+            if (userProduct != null) {
+                _appDbContext.UserProduct.Remove(userProduct);
+                await _appDbContext.SaveChangesAsync();
+            }
+        }
 
+        public async Task AddSave(int IdKey)
+        {
+            var userProduct = await _appDbContext.UserProduct.FindAsync(IdKey);
+            if (userProduct != null)
+            {
+                userProduct.IsSaved = true;
+                await _appDbContext.SaveChangesAsync();
+            }
+        }
     }
 }

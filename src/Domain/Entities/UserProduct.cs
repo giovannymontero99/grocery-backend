@@ -24,6 +24,9 @@ namespace GroceryBackend.src.Domain.Entities {
         [Column("user_product_added_at")]
         public DateTime? AddedAt { get; set; } = DateTime.UtcNow;
 
+        [Column("user_product_is_saved")]
+        public bool IsSaved { get; set; } = false;
+
         [ForeignKey("UserId")]
         public User User { get; set; }
 

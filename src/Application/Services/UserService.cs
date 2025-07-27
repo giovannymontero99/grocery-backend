@@ -52,7 +52,8 @@ namespace GroceryBackend.src.Application.Services
                 {
                     Id = user.UserId,
                     Name = user.UserName,
-                    Email = user.Email
+                    Email = user.Email,
+                    FullName = user.FullName
                 };
             }
             return userDto;
