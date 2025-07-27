@@ -38,9 +38,11 @@ namespace GroceryBackend.src.Infrastructure.Repositories
 
         public async Task AddSave(UserProduct userProduct)
         {
-            if (userProduct != null)
+            var newUserProduct = await _appDbContext.UserProduct.FindAsync(userProduct.UserProductId);
+
+            if (newUserProduct != null)
             {
-                UserProduct updateduserProduct = userProduct;
+                newUserProduct.IsSaved = userProduct.IsSaved;
                 await _appDbContext.SaveChangesAsync();
             }
         }

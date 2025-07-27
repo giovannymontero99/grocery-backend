@@ -146,6 +146,14 @@ namespace GroceryBackend.src.WebAPI.Controllers
         {
             try
             {
+                // Take the id user from token
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                // Validate not null
+                if (userId == null) return Unauthorized();
+
+                userProductDto.IdUser = int.Parse(userId); 
+
                 await _userProductsService.AddSave(userProductDto);
                 return Ok();
             }
