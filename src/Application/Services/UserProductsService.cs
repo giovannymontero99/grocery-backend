@@ -12,9 +12,15 @@ namespace GroceryBackend.src.Application.Services
             _userProductsRepository = userProductsRepository;
         }
 
-        public async Task AddSave(int IdKey)
+        public async Task AddSave(UserProductDto userProductDto)
         {
-            await _userProductsRepository.AddSave(IdKey);
+            var userProduct = new UserProduct()
+            {
+                UserProductId = userProductDto.UserProductId,
+                IsSaved = userProductDto.IsSaved,
+            };
+
+            await _userProductsRepository.AddSave(userProduct);
         }
 
         public async Task AddUserProductAsync(UserProductDto userProductDto)

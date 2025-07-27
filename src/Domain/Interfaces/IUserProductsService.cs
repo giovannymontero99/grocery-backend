@@ -9,6 +9,6 @@ namespace GroceryBackend.src.Domain.Interfaces
 
         Task DeleteByKeyAsync(int IdKey);
 
-        Task AddSave(int IdKey);
+        Task AddSave(UserProductDto userProductDto);
     }
 }

@@ -7,6 +7,6 @@ namespace GroceryBackend.src.Domain.Interfaces
         Task<List<UserProduct>> GetAllByUserSync(int IdUser);
         Task AddUserProductAsync(UserProduct userProduct);
         Task DeleteByKeyAsync(int IdKey);
-        Task AddSave(int IdKey);
+        Task AddSave(UserProduct userProductDto);
     }
 }

@@ -142,11 +142,11 @@ namespace GroceryBackend.src.WebAPI.Controllers
 
         [Authorize]
         [HttpPost("save_favorite_product")]
-        public async Task<IActionResult> SaveFavoriteUserProduct([FromBody] int idKey) 
+        public async Task<IActionResult> SaveFavoriteUserProduct([FromBody] UserProductDto userProductDto) 
         {
             try
             {
-                await _userProductsService.AddSave(idKey);
+                await _userProductsService.AddSave(userProductDto);
                 return Ok();
             }
             catch (Exception ex) 
