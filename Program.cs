@@ -26,7 +26,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")))
     };
 });
 
@@ -37,10 +37,10 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .WithOrigins("http://localhost:4200") // URL de tu frontend Angular
+                .WithOrigins("http://localhost:4200")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowCredentials(); // Si usas cookies o auth headers
+                .AllowCredentials();
         });
 });
 
@@ -52,7 +52,7 @@ builder.Services.AddRazorPages();
 
 // Add DbContext (PostgreSQL)
 builder.Services.AddDbContext<AppDbContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQL")));
+    options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONFIG_POSTGRES_URL")));
 
 
 // Register Repository

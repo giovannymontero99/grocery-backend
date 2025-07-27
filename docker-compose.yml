@@ -1,0 +1,34 @@
+version: '3.8'
+
+services: 
+    db: 
+        image: postgres:latest
+        environment: 
+            POSTGRES_DB: grocery_db
+            POSTGRES_USER: demo
+            POSTGRES_PASSWORD: demo
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports: 
+            - "5432:5432"
+        healthcheck: 
+            test: ["CMD-SHELL", "pg_isready -U demo"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+    backend:
+        build: .
+        environment:
+            ASPNETCORE_ENVIRONMENT: Development
+            DB_CONFIG_POSTGRES_URL: "Server=db;Port=5432;Database=grocery_db;User Id=demo;Password=demo;"
+            JWT_KEY: "aB3jK9!pQr7$zXvLmWcH2nTfG4eYdUtaYnasdAWE&%"
+            JWT_ISSUER: "https://localhost:8080"
+            JWT_AUDIENCE: "https://localhost:8080"
+            JWT_EXPIREMINUTES: "60"
+        depends_on:
+            db:
+                condition: service_healthy
+        ports:
+            - "5000:8080"
+volumes:
+  postgres_data:
