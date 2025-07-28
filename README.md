@@ -51,7 +51,7 @@ A scalable backend API for grocery management, built with .NET 8, Clean Architec
 
 # Backend Diagram
 
-```
+```mermaid
 flowchart TD
     A[Frontend] -->|HTTP Requests| B[WebAPI]
     subgraph Backend .NET
